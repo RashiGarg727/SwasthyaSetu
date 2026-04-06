@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwasthyaSetu – India's Health Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #3aaa35;
+    --green-dark: #2d8a29;
+    --green-light: #e8f7e8;
+    --orange: #f47c20;
+    --orange-light: #fff4ec;
+    --yellow: #f5c518;
+    --dark: #1e2a1e;
+    --text: #2d3748;
+    --text-muted: #718096;
+    --white: #ffffff;
+    --bg: #f5faf5;
+    --card: #ffffff;
+    --border: #d4edda;
+    --shadow: 0 4px 24px rgba(58,170,53,0.10);
+    --shadow-lg: 0 8px 40px rgba(58,170,53,0.16);
+    --radius: 18px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ─── LOGIN PAGE ─── */
+  #login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: stretch;
+    background: var(--white);
+  }
+
+  /* FIX 1: Logo-friendly left panel — white/light background so SVG is clearly visible */
+  .login-left {
+    flex: 1.2;
+    background: linear-gradient(160deg, #ffffff 0%, #e8f7e8 40%, #c8edc6 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+    border-right: 2px solid var(--border);
+  }
+
+  /* Decorative circles */
+  .login-left::before {
+    content: '';
+    position: absolute;
+    width: 420px; height: 420px;
+    background: rgba(58,170,53,0.08);
+    border-radius: 50%;
+    top: -120px; left: -120px;
+  }
+  .login-left::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    background: rgba(244,124,32,0.07);
+    border-radius: 50%;
+    bottom: -80px; right: -80px;
+  }
+
+  .login-logo-wrap { text-align: center; margin-bottom: 30px; z-index: 2; }
+
+  /* FIX 1b: Logo card — white card behind SVG so it always pops */
+  .logo-card {
+    width: 150px; height: 150px;
+    background: #fff;
+    border-radius: 32px;
+    box-shadow: 0 8px 40px rgba(58,170,53,0.18), 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    border: 2px solid var(--border);
+  }
+  .login-logo-svg { width: 110px; height: 110px; }
+  .login-brand { font-family: 'Poppins', sans-serif; font-size: 2.6rem; font-weight: 800; color: var(--dark); margin-top: 6px; }
+  .login-brand span { color: var(--orange); }
+  .login-tagline { color: var(--green-dark); font-size: 1.08rem; font-weight: 700; margin-top: 4px; letter-spacing: 0.5px; }
+
+  .login-features { margin-top: 44px; z-index: 2; width: 100%; max-width: 340px; }
+  .feat-item { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 14px; padding: 14px 20px; margin-bottom: 14px; color: var(--dark); font-weight: 700; font-size: 0.97rem; border: 1.5px solid var(--border); box-shadow: 0 2px 12px rgba(58,170,53,0.08); }
+  .feat-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+  .health-img-strip { display: flex; gap: 10px; margin-top: 36px; z-index: 2; }
+  .health-img-pill { background: rgba(255,255,255,0.9); border: 1.5px solid var(--border); border-radius: 50px; padding: 8px 18px; color: var(--dark); font-size: 0.85rem; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+
+  .login-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 50px;
+    background: #f8fdf8;
+  }
+  .login-box { width: 100%; max-width: 400px; }
+  .login-box h2 { font-family: 'Poppins', sans-serif; font-size: 2rem; font-weight: 800; color: var(--dark); }
+  .login-box h2 span { color: var(--green); }
+  .login-box p { color: var(--text-muted); margin-top: 6px; margin-bottom: 36px; font-size: 1rem; }
+
+  .form-group { margin-bottom: 22px; }
+  .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--dark); font-size: 0.95rem; }
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-family: 'Nunito', sans-serif;
+    background: #fff;
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(58,170,53,0.12); }
+
+  .input-icon-wrap { position: relative; }
+  .input-icon-wrap input { padding-left: 48px; }
+  .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
+
+  .btn-login {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(90deg, var(--green-dark), var(--green));
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 18px rgba(58,170,53,0.3);
+    margin-top: 8px;
+  }
+  .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(58,170,53,0.4); }
+  .btn-login:active { transform: translateY(0); }
+
+  .login-error { background: #fff0f0; border: 1.5px solid #f87171; color: #b91c1c; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.93rem; font-weight: 600; display: none; }
+  .login-hint { text-align: center; margin-top: 22px; font-size: 0.88rem; color: var(--text-muted); }
+  .login-hint strong { color: var(--green); }
+
+  /* ─── DASHBOARD ─── */
+  #dashboard-page { display: none; min-height: 100vh; background: var(--bg); }
+
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0;
+    width: 250px;
+    background: linear-gradient(180deg, #1b6b1a 0%, #2d8a29 60%, #3aaa35 100%);
+    display: flex; flex-direction: column;
+    padding: 28px 0;
+    z-index: 100;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+  }
+  .sidebar-logo { display: flex; align-items: center; gap: 12px; padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.15); }
+  .sidebar-logo-img { width: 44px; height: 44px; }
+  .sidebar-logo-text { font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; font-size: 1.1rem; line-height: 1.2; }
+  .sidebar-logo-text span { color: var(--yellow); }
+
+  .sidebar-nav { flex: 1; padding: 20px 0; }
+  .nav-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 24px;
+    color: rgba(255,255,255,0.82);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+    transition: all 0.18s;
+  }
+  .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.12); color: #fff; border-left-color: var(--yellow); }
+  .nav-icon { font-size: 1.25rem; width: 26px; text-align: center; }
+  .nav-badge { margin-left: auto; background: var(--orange); color: #fff; border-radius: 20px; padding: 2px 8px; font-size: 0.75rem; font-weight: 800; }
+
+  .sidebar-footer { padding: 20px 24px 0; border-top: 1px solid rgba(255,255,255,0.15); }
+  .btn-logout {
+    width: 100%; padding: 12px; background: rgba(255,255,255,0.12);
+    color: #fff; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 10px;
+    font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-logout:hover { background: rgba(255,80,80,0.25); border-color: rgba(255,100,100,0.5); }
+
+  .main-content { margin-left: 250px; padding: 32px 36px; }
+
+  .top-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+  .header-greeting h1 { font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--dark); }
+  .header-greeting h1 span { color: var(--green); }
+  .header-greeting p { color: var(--text-muted); font-size: 0.95rem; margin-top: 2px; }
+
+  .header-user { display: flex; align-items: center; gap: 14px; }
+  .user-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--green), var(--orange)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.4rem; font-weight: 800; box-shadow: 0 4px 14px rgba(58,170,53,0.3); }
+  .user-info-text { text-align: right; }
+  .user-info-text strong { font-size: 1rem; font-weight: 800; display: block; }
+  .user-info-text span { font-size: 0.82rem; color: var(--text-muted); font-weight: 600; }
+
+  .card { background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .card-title { font-family: 'Poppins', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--dark); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card-title .icon { font-size: 1.2rem; }
+
+  .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .action-btn {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 16px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+    font-weight: 700; font-size: 0.9rem; color: var(--text);
+    text-align: center;
+  }
+  .action-btn:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--green); color: var(--green); }
+  .action-btn .ab-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+  .ab-green { background: var(--green-light); color: var(--green); }
+  .ab-orange { background: var(--orange-light); color: var(--orange); }
+  .ab-yellow { background: #fffbea; color: #b7791f; }
+  .ab-blue { background: #eff6ff; color: #2563eb; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+
+  .health-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; margin: 4px 4px 4px 0; }
+  .tag-red { background: #fff0f0; color: #c53030; border: 1px solid #fed7d7; }
+  .tag-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+  .tag-yellow { background: #fffbea; color: #92400e; border: 1px solid #fde68a; }
+  .tag-green { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--border); }
+
+  .health-section { margin-bottom: 16px; }
+  .health-section h4 { font-size: 0.82rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+
+  .report-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .report-item:last-child { border-bottom: none; }
+  .report-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--orange-light); color: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .report-info { flex: 1; }
+  .report-name { font-weight: 700; font-size: 0.95rem; }
+  .report-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+  .report-actions { display: flex; gap: 8px; }
+  .btn-sm { padding: 6px 14px; border-radius: 8px; border: 1.5px solid; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+  .btn-view { border-color: var(--green); color: var(--green); background: var(--green-light); }
+  .btn-view:hover { background: var(--green); color: #fff; }
+  .btn-del { border-color: #fc8181; color: #e53e3e; background: #fff5f5; }
+  .btn-del:hover { background: #e53e3e; color: #fff; }
+
+  .alert-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: 12px; margin-bottom: 12px; }
+  .alert-warn { background: #fffbea; border: 1.5px solid #f6e05e; }
+  .alert-red { background: #fff5f5; border: 1.5px solid #fc8181; }
+  .alert-green { background: var(--green-light); border: 1.5px solid var(--border); }
+  .alert-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
+  .alert-text strong { font-size: 0.9rem; font-weight: 800; display: block; margin-bottom: 2px; }
+  .alert-text span { font-size: 0.82rem; color: var(--text-muted); }
+
+  .share-option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; background: var(--bg); border: 1.5px solid var(--border); margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
+  .share-option:hover { border-color: var(--green); background: var(--green-light); }
+  .share-opt-icon { width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, var(--green), var(--green-dark)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .share-opt-info strong { font-size: 0.93rem; font-weight: 800; display: block; }
+  .share-opt-info span { font-size: 0.8rem; color: var(--text-muted); }
+  .share-arrow { margin-left: auto; color: var(--green); font-size: 1.1rem; }
+
+  .stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card { background: var(--card); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .stat-card .s-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 800; color: var(--text-muted); }
+  .stat-card .s-val { font-family: 'Poppins', sans-serif; font-size: 2rem; font-weight: 800; margin: 4px 0; }
+  .stat-card .s-sub { font-size: 0.8rem; color: var(--text-muted); }
+  .s-green { color: var(--green); }
+  .s-orange { color: var(--orange); }
+  .s-red { color: #e53e3e; }
+  .s-blue { color: #2563eb; }
+
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+    z-index: 1000; align-items: flex-start; justify-content: center;
+    overflow-y: auto; padding: 24px 16px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: var(--radius); width: 100%; max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: popIn 0.25s ease;
+    display: flex; flex-direction: column; margin: auto;
+  }
+  @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  /* Sticky header — never scrolls away */
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px 14px;
+    border-bottom: 1.5px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: #fff;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .modal-header h3 { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 800; }
+  .modal-body { padding: 22px 24px; }
+  .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); padding: 4px; }
+  .modal-back { background: var(--green-light); border: 1.5px solid var(--border); color: var(--green-dark); font-size: 0.85rem; font-weight: 800; padding: 6px 14px; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .modal-back:hover { background: var(--green); color: #fff; border-color: var(--green); }
+  .drop-zone { border: 2.5px dashed var(--green); border-radius: var(--radius-sm); padding: 32px 20px; text-align: center; background: var(--green-light); cursor: pointer; transition: background 0.2s; }
+  .drop-zone:hover { background: #d4edda; }
+  .drop-zone .dz-icon { font-size: 3rem; margin-bottom: 10px; }
+  .drop-zone p { font-weight: 700; color: var(--green-dark); }
+  .drop-zone small { color: var(--text-muted); font-size: 0.82rem; }
+  /* Sticky footer — always visible at bottom of modal */
+  .modal-actions {
+    display: flex; gap: 12px;
+    padding: 14px 24px 20px;
+    border-top: 1.5px solid var(--border);
+    background: #fff;
+    border-radius: 0 0 var(--radius) var(--radius);
+    position: sticky; bottom: 0; z-index: 10;
+  }
+  .btn-primary { flex: 1; padding: 13px; background: linear-gradient(90deg, var(--green-dark), var(--green)); color: #fff; border: none; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; }
+  .btn-secondary { flex: 1; padding: 13px; background: var(--bg); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; }
+
+  .toast { position: fixed; bottom: 30px; right: 30px; background: var(--dark); color: #fff; padding: 14px 22px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; z-index: 9999; transform: translateY(100px); opacity: 0; transition: all 0.3s; max-width: 360px; }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-icon { font-size: 1.2rem; }
+
+  .pulse-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(58,170,53,0.5)} 50%{box-shadow:0 0 0 6px rgba(58,170,53,0)} }
+
+  .section-divider { font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .id-badge { background: var(--green-light); border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 14px; font-size: 0.82rem; font-weight: 800; color: var(--green-dark); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .id-badge:hover { background: var(--green); color: #fff; }
+
+  .ai-chip { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(90deg, #7c3aed, #4f46e5); color: #fff; border-radius: 50px; padding: 4px 12px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.3px; }
+
+  /* Loading spinner for AI */
+  .ai-loading { display: none; align-items: center; gap: 10px; padding: 12px 16px; background: #f0f4ff; border-radius: 10px; border: 1.5px solid #c7d2fe; margin-bottom: 12px; font-size: 0.9rem; font-weight: 700; color: #4338ca; }
+  .ai-loading.show { display: flex; }
+  .spinner { width: 18px; height: 18px; border: 3px solid #c7d2fe; border-top-color: #4f46e5; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 900px) {
+    .login-left { display: none; }
+    .sidebar { width: 200px; }
+    .main-content { margin-left: 200px; padding: 20px; }
+    .quick-actions, .stat-cards { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  .page-section { display: none; }
+  .page-section.active { display: block; }
+
+  .prog-bar { height: 8px; border-radius: 50px; background: var(--border); overflow: hidden; margin-top: 6px; }
+  .prog-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--green-dark), var(--green)); }
+
+  .vitals-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .vitals-row:last-child { border-bottom: none; }
+  .vital-label { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); }
+  .vital-val { font-size: 1rem; font-weight: 800; }
+  .vital-status { font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 50px; }
+  .vs-normal { background: var(--green-light); color: var(--green-dark); }
+  .vs-warn { background: #fffbea; color: #92400e; }
+  .vs-high { background: #fff0f0; color: #c53030; }
+
+  /* AI Summary result box */
+  .ai-result-box { background: #f8f7ff; border: 1.5px solid #c4b5fd; border-radius: 12px; padding: 16px; margin-top: 14px; font-size: 0.88rem; line-height: 1.7; color: var(--text); white-space: pre-wrap; display: none; }
+  .ai-result-box.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ LOGIN PAGE ═══════════════════════════════════════ -->
+<div id="login-page">
+  <div class="login-left">
+    <div class="login-logo-wrap">
+      <!-- FIX: Logo sits on a white card for full visibility -->
+      <div class="logo-card">
+        <svg class="login-logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 170 C40 130 20 90 20 70 C20 45 40 28 65 28 C80 28 93 36 100 48 C107 36 120 28 135 28 C160 28 180 45 180 70 C180 90 160 130 100 170Z" fill="#f47c20"/>
+          <path d="M100 158 C50 123 34 88 34 70 C34 50 49 38 65 38 C78 38 90 45 100 58 C110 45 122 38 135 38 C151 38 166 50 166 70 C166 88 150 123 100 158Z" fill="#e86a10"/>
+          <circle cx="145" cy="60" r="14" fill="none" stroke="#3aaa35" stroke-width="7"/>
+          <path d="M131 60 L100 60 L100 80" fill="none" stroke="#3aaa35" stroke-width="7" stroke-linecap="round"/>
+          <path d="M69 28 C50 28 38 42 38 58 L38 72" fill="none" stroke="#3aaa35" stroke-width="7" stroke-linecap="round"/>
+          <path d="M131 28 C150 28 162 42 162 58 L162 72" fill="none" stroke="#3aaa35" stroke-width="7" stroke-linecap="round"/>
+          <rect x="84" y="72" width="32" height="56" rx="6" fill="#f5c518"/>
+          <rect x="72" y="84" width="56" height="32" rx="6" fill="#f5c518"/>
+          <rect x="88" y="78" width="24" height="44" rx="4" fill="#fff" opacity="0.3"/>
+          <path d="M55 130 L80 155 L145 95" fill="none" stroke="#3aaa35" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="100" cy="80" r="7" fill="#3aaa35"/>
+        </svg>
+      </div>
+      <div class="login-brand">Swasthya<span>Setu</span></div>
+      <div class="login-tagline">🇮🇳 India's Health Companion</div>
+    </div>
+
+    <div class="login-features">
+      <div class="feat-item"><span class="feat-icon">🔬</span> AI-Powered Report Analysis</div>
+      <div class="feat-item"><span class="feat-icon">🔒</span> Secure Health Records</div>
+      <div class="feat-item"><span class="feat-icon">📊</span> Smart Health Insights</div>
+      <div class="feat-item"><span class="feat-icon">🩺</span> Share with Doctors Instantly</div>
+    </div>
+
+    <div class="health-img-strip">
+      <div class="health-img-pill">❤️ Cardio</div>
+      <div class="health-img-pill">🧬 Pathology</div>
+      <div class="health-img-pill">💊 Medicine</div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-box">
+      <h2>Welcome <span>Back!</span></h2>
+      <p>Login to access your personal health dashboard</p>
+
+      <div class="login-error" id="login-error">❌ Invalid ID or password. Please try again.</div>
+
+      <div class="form-group">
+        <label>🪪 Health ID</label>
+        <div class="input-icon-wrap">
+          <span class="input-icon">👤</span>
+          <input type="text" id="login-id" placeholder="Enter your Health ID (e.g. SS-00123)" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>🔑 Password</label>
+        <div class="input-icon-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="login-pass" placeholder="Enter your password">
+        </div>
+      </div>
+
+      <button class="btn-login" onclick="doLogin()">🚀 Login to Dashboard</button>
+
+      <div class="login-hint">
+        Demo credentials: ID <strong>SS-00123</strong> · Password <strong>health123</strong>
+      </div>
+
+      <div style="text-align:center;margin-top:12px;">
+        <span style="font-size:0.9rem;color:var(--text-muted)">New user?</span>
+        <span onclick="showSignup()" style="color:var(--green);font-weight:800;cursor:pointer;margin-left:6px;">Create Account</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ DASHBOARD ═══════════════════════════════════════ -->
+<div id="dashboard-page">
+
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <svg class="sidebar-logo-img" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 170 C40 130 20 90 20 70 C20 45 40 28 65 28 C80 28 93 36 100 48 C107 36 120 28 135 28 C160 28 180 45 180 70 C180 90 160 130 100 170Z" fill="#f47c20"/>
+        <rect x="84" y="72" width="32" height="56" rx="6" fill="#f5c518"/>
+        <rect x="72" y="84" width="56" height="32" rx="6" fill="#f5c518"/>
+        <path d="M55 130 L80 155 L145 95" fill="none" stroke="#3aaa35" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="sidebar-logo-text">Swasthya<span>Setu</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="showSection('dashboard')">
+        <span class="nav-icon">🏠</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="showSection('reports')">
+        <span class="nav-icon">📄</span> My Reports
+        <span class="nav-badge" id="reports-count-badge">4</span>
+      </div>
+      <div class="nav-item" onclick="showSection('health')">
+        <span class="nav-icon">❤️</span> Health Summary
+      </div>
+      <div class="nav-item" onclick="showSection('insights')">
+        <span class="nav-icon">💡</span> Insights
+        <span class="nav-badge">2</span>
+      </div>
+      <div class="nav-item" onclick="showSection('share')">
+        <span class="nav-icon">🔗</span> Share & Link
+      </div>
+      <div class="nav-item" onclick="openUploadModal()">
+        <span class="nav-icon">📤</span> Upload Report
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+
+    <div class="top-header">
+      <div class="header-greeting">
+        <h1>Good Morning, <span id="user-name-display">Rahul</span>! 👋</h1>
+        <p>Here's your health overview for today · <span id="today-date"></span></p>
+      </div>
+      <div class="header-user">
+        <div class="id-badge" onclick="copyId()" title="Click to copy">
+          🪪 <span id="user-id-badge">SS-00123</span> 📋
+        </div>
+        <div class="user-info-text">
+          <strong id="user-name-top">Rahul Sharma</strong>
+          <span>Verified Patient</span>
+        </div>
+        <div class="user-avatar" id="user-avatar-icon">R</div>
+      </div>
+    </div>
+
+    <!-- ── DASHBOARD SECTION ── -->
+    <div id="section-dashboard" class="page-section active">
+
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="s-label">Total Reports</div>
+          <div class="s-val s-orange" id="stat-reports">4</div>
+          <div class="s-sub">2 uploaded this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-label">Medications</div>
+          <div class="s-val s-blue">3</div>
+          <div class="s-sub">Active prescriptions</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-label">Alerts</div>
+          <div class="s-val s-red">2</div>
+          <div class="s-sub">Need attention</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-label">Health Score</div>
+          <div class="s-val s-green">72<span style="font-size:1rem">/100</span></div>
+          <div class="s-sub">Good condition</div>
+        </div>
+      </div>
+
+      <div class="section-divider">Quick Actions</div>
+      <div class="quick-actions">
+        <div class="action-btn" onclick="openUploadModal()">
+          <div class="ab-icon ab-green">📤</div>
+          Upload Report
+        </div>
+        <div class="action-btn" onclick="showSection('share')">
+          <div class="ab-icon ab-orange">🔗</div>
+          Link / View ID
+        </div>
+        <div class="action-btn" onclick="showSection('reports')">
+          <div class="ab-icon ab-yellow">📄</div>
+          View Records
+        </div>
+        <div class="action-btn" onclick="downloadSummary()">
+          <div class="ab-icon ab-blue">📥</div>
+          Download Summary
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="icon">❤️</span> Health Summary <span class="ai-chip">✨ AI Extracted</span></div>
+
+          <div class="health-section">
+            <h4>Recent Diseases / Conditions</h4>
+            <span class="health-tag tag-red">🤒 Viral Fever</span>
+            <span class="health-tag tag-red">🩸 Mild Anemia</span>
+            <span class="health-tag tag-blue">🫁 Asthma (Controlled)</span>
+          </div>
+
+          <div class="health-section">
+            <h4>Current Medications</h4>
+            <span class="health-tag tag-blue">💊 Paracetamol 500mg</span>
+            <span class="health-tag tag-blue">💊 Azithromycin</span>
+            <span class="health-tag tag-blue">💊 Montelukast</span>
+          </div>
+
+          <div class="health-section">
+            <h4>Known Allergies ⚠️</h4>
+            <span class="health-tag tag-yellow">🚫 Penicillin</span>
+            <span class="health-tag tag-yellow">🚫 Sulfa Drugs</span>
+            <span class="health-tag tag-yellow">🚫 Dust Mites</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">📊</span> Vitals Overview</div>
+          <div class="vitals-row">
+            <span class="vital-label">Blood Pressure</span>
+            <span class="vital-val">120/80 mmHg</span>
+            <span class="vital-status vs-normal">Normal</span>
+          </div>
+          <div class="vitals-row">
+            <span class="vital-label">Blood Sugar</span>
+            <span class="vital-val">105 mg/dL</span>
+            <span class="vital-status vs-normal">Normal</span>
+          </div>
+          <div class="vitals-row">
+            <span class="vital-label">Hemoglobin</span>
+            <span class="vital-val">10.8 g/dL</span>
+            <span class="vital-status vs-warn">Low</span>
+          </div>
+          <div class="vitals-row">
+            <span class="vital-label">Cholesterol</span>
+            <span class="vital-val">210 mg/dL</span>
+            <span class="vital-status vs-warn">Borderline</span>
+          </div>
+          <div class="vitals-row">
+            <span class="vital-label">SpO₂</span>
+            <span class="vital-val">97%</span>
+            <span class="vital-status vs-normal">Normal</span>
+          </div>
+          <div style="margin-top:16px">
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-weight:700;margin-bottom:4px"><span>Overall Health Score</span><span style="color:var(--green)">72%</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:72%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">💡</span> Insights & Alerts</div>
+        <div class="alert-item alert-red">
+          <span class="alert-icon">⚠️</span>
+          <div class="alert-text">
+            <strong>Allergy Warning</strong>
+            <span>You are allergic to Penicillin. Inform your doctor before any antibiotic prescription.</span>
+          </div>
+        </div>
+        <div class="alert-item alert-warn">
+          <span class="alert-icon">📉</span>
+          <div class="alert-text">
+            <strong>Low Hemoglobin Detected</strong>
+            <span>Your hemoglobin (10.8 g/dL) is below normal. Consider iron-rich diet or consult a doctor.</span>
+          </div>
+        </div>
+        <div class="alert-item alert-green">
+          <span class="alert-icon">✅</span>
+          <div class="alert-text">
+            <strong>Asthma Well Controlled</strong>
+            <span>No acute episodes in the last 3 reports. Keep up with Montelukast as prescribed.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REPORTS SECTION ── -->
+    <div id="section-reports" class="page-section">
+      <div class="card">
+        <div class="card-title" style="justify-content:space-between">
+          <span><span class="icon">📄</span> Uploaded Medical Reports</span>
+          <button class="btn-sm btn-view" onclick="openUploadModal()">+ Upload New</button>
+        </div>
+        <div id="reports-list">
+          <div class="report-item">
+            <div class="report-icon">🩸</div>
+            <div class="report-info">
+              <div class="report-name">Complete Blood Count (CBC)</div>
+              <div class="report-meta">📅 Mar 15, 2025 · 1.2 MB · PDF</div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-sm btn-view" onclick="showToast('📄 Opening report...')">View</button>
+              <button class="btn-sm btn-del" onclick="deleteReport(this)">Delete</button>
+            </div>
+          </div>
+          <div class="report-item">
+            <div class="report-icon">🫀</div>
+            <div class="report-info">
+              <div class="report-name">ECG Report – Apollo Hospital</div>
+              <div class="report-meta">📅 Feb 28, 2025 · 3.4 MB · Image</div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-sm btn-view" onclick="showToast('📄 Opening report...')">View</button>
+              <button class="btn-sm btn-del" onclick="deleteReport(this)">Delete</button>
+            </div>
+          </div>
+          <div class="report-item">
+            <div class="report-icon">💊</div>
+            <div class="report-info">
+              <div class="report-name">Prescription – Dr. Meera Joshi</div>
+              <div class="report-meta">📅 Jan 10, 2025 · 0.8 MB · PDF</div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-sm btn-view" onclick="showToast('📄 Opening report...')">View</button>
+              <button class="btn-sm btn-del" onclick="deleteReport(this)">Delete</button>
+            </div>
+          </div>
+          <div class="report-item">
+            <div class="report-icon">🫁</div>
+            <div class="report-info">
+              <div class="report-name">Chest X-Ray Report</div>
+              <div class="report-meta">📅 Dec 20, 2024 · 5.1 MB · Image</div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-sm btn-view" onclick="showToast('📄 Opening report...')">View</button>
+              <button class="btn-sm btn-del" onclick="deleteReport(this)">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HEALTH SUMMARY SECTION ── -->
+    <div id="section-health" class="page-section">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="icon">🤒</span> Diagnosed Conditions</div>
+          <div class="health-section">
+            <div class="health-tag tag-red">Viral Fever – Mar 2025</div>
+            <div class="health-tag tag-blue">Asthma (Chronic) – Since 2019</div>
+            <div class="health-tag tag-red">Mild Anemia – Feb 2025</div>
+            <div class="health-tag tag-yellow">Borderline Cholesterol – Jan 2025</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">💊</span> Current Medications</div>
+          <div class="vitals-row">
+            <span class="vital-label">Paracetamol 500mg</span>
+            <span class="health-tag tag-blue" style="margin:0">Twice daily</span>
+          </div>
+          <div class="vitals-row">
+            <span class="vital-label">Azithromycin 250mg</span>
+            <span class="health-tag tag-blue" style="margin:0">Once daily</span>
+          </div>
+          <div class="vitals-row">
+            <span class="vital-label">Montelukast 10mg</span>
+            <span class="health-tag tag-blue" style="margin:0">Night</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🚫</span> Known Allergies</div>
+          <div class="alert-item alert-red">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-text"><strong>Penicillin</strong><span>Severe reaction – Avoid all penicillin-group antibiotics</span></div>
+          </div>
+          <div class="alert-item alert-warn">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-text"><strong>Sulfa Drugs</strong><span>Mild rash reported</span></div>
+          </div>
+          <div class="alert-item alert-warn">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-text"><strong>Dust Mites</strong><span>Triggers asthma episodes</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🧬</span> AI Analysis Status <span class="ai-chip">✨ Claude AI</span></div>
+          <div class="vitals-row"><span class="vital-label">Reports Processed</span><span class="vital-val s-green">4 / 4</span></div>
+          <div class="vitals-row"><span class="vital-label">Symptoms Extracted</span><span class="vital-val s-blue">12</span></div>
+          <div class="vitals-row"><span class="vital-label">Medicines Identified</span><span class="vital-val s-blue">7</span></div>
+          <div class="vitals-row"><span class="vital-label">Allergies Flagged</span><span class="vital-val s-red">3</span></div>
+          <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
+            <span class="pulse-dot"></span>
+            <span style="font-size:0.85rem;color:var(--green-dark);font-weight:700">AI Model Active</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INSIGHTS SECTION ── -->
+    <div id="section-insights" class="page-section">
+      <div class="card">
+        <div class="card-title"><span class="icon">💡</span> Health Insights & Alerts</div>
+        <div class="alert-item alert-red">
+          <span class="alert-icon">🔴</span>
+          <div class="alert-text">
+            <strong>Critical: Penicillin Allergy on File</strong>
+            <span>Always inform healthcare providers about this allergy before any treatment. Carry an allergy card.</span>
+          </div>
+        </div>
+        <div class="alert-item alert-warn">
+          <span class="alert-icon">🟡</span>
+          <div class="alert-text">
+            <strong>Recurring Pattern: Respiratory Issues</strong>
+            <span>Asthma-related symptoms appear in 3 of 4 uploaded reports. Consider pulmonologist consultation.</span>
+          </div>
+        </div>
+        <div class="alert-item alert-warn">
+          <span class="alert-icon">📉</span>
+          <div class="alert-text">
+            <strong>Hemoglobin Trending Low</strong>
+            <span>10.8 g/dL in latest CBC report. Normal range is 13.5–17.5 g/dL. Iron supplementation may help.</span>
+          </div>
+        </div>
+        <div class="alert-item alert-green">
+          <span class="alert-icon">✅</span>
+          <div class="alert-text">
+            <strong>Blood Pressure Normal</strong>
+            <span>Consistent 120/80 readings across 2 reports. Great cardiovascular health!</span>
+          </div>
+        </div>
+        <div class="alert-item alert-green">
+          <span class="alert-icon">✅</span>
+          <div class="alert-text">
+            <strong>Blood Sugar Stable</strong>
+            <span>Fasting blood sugar at 105 mg/dL. Within normal range. Continue healthy diet.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SHARE SECTION ── -->
+    <div id="section-share" class="page-section">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="icon">🔗</span> Your Health ID</div>
+          <div style="text-align:center;padding:24px 0">
+            <div style="width:140px;height:140px;margin:0 auto 16px;background:#f0f0f0;border-radius:14px;display:flex;align-items:center;justify-content:center;border:2px solid var(--border)">
+              <div style="font-size:3rem">📱</div>
+            </div>
+            <div style="font-family:'Poppins',sans-serif;font-size:1.6rem;font-weight:800;color:var(--green);letter-spacing:2px" id="share-id">SS-00123</div>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin-top:6px">Scan QR or share ID with your doctor</p>
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:16px">
+              <button class="btn-sm btn-view" onclick="copyId()">📋 Copy ID</button>
+              <button class="btn-sm btn-view" onclick="showToast('🔗 Link generated!')">🔗 Get Link</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">📤</span> Share With Doctor</div>
+          <div class="share-option" onclick="downloadSummary()">
+            <div class="share-opt-icon">📄</div>
+            <div class="share-opt-info">
+              <strong>Share Summary PDF</strong>
+              <span>Send complete health summary as PDF</span>
+            </div>
+            <span class="share-arrow">→</span>
+          </div>
+          <div class="share-option" onclick="shareLink()">
+            <div class="share-opt-icon">🔒</div>
+            <div class="share-opt-info">
+              <strong>Share Secure Link</strong>
+              <span>Doctor views records securely online</span>
+            </div>
+            <span class="share-arrow">→</span>
+          </div>
+          <div class="share-option" onclick="sendEmail()">
+            <div class="share-opt-icon">📧</div>
+            <div class="share-opt-info">
+              <strong>Email to Doctor</strong>
+              <span>Send via email directly</span>
+            </div>
+            <span class="share-arrow">→</span>
+          </div>
+          <div class="share-option" onclick="shareWhatsApp()">
+            <div class="share-opt-icon" style="background:linear-gradient(135deg,#25d366,#128c7e)">💬</div>
+            <div class="share-opt-info">
+              <strong>Share via WhatsApp</strong>
+              <span>Quick share on WhatsApp</span>
+            </div>
+            <span class="share-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Upload Modal — clicking the dark overlay also closes it -->
+<div class="modal-overlay" id="upload-modal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <button class="modal-back" onclick="closeUploadModal()" title="Back to Dashboard">← Back</button>
+      <h3>📤 Upload Report</h3>
+      <button class="modal-close" onclick="closeUploadModal()" title="Close">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="drop-zone" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" style="display:none" accept=".pdf,.jpg,.png,.txt">
+        <div class="dz-icon">📁</div>
+        <p>Drag & drop or click to upload</p>
+        <small>Supports PDF, JPG, PNG, TXT · Max 20MB</small>
+        <p id="file-name" style="margin-top:10px;font-size:0.85rem;color:var(--green-dark);font-weight:700;"></p>
+      </div>
+
+      <!-- AI Loading indicator -->
+      <div class="ai-loading" id="ai-loading" style="margin-top:14px;">
+        <div class="spinner"></div>
+        <span>✨ Claude AI is analyzing your report...</span>
+      </div>
+
+      <!-- AI Result preview -->
+      <div class="ai-result-box" id="ai-result-box"></div>
+
+      <div style="margin-top:14px">
+        <div class="form-group">
+          <label>Report Type</label>
+          <select id="report-type-select">
+            <option>Blood Test / CBC</option>
+            <option>Prescription</option>
+            <option>X-Ray / Scan</option>
+            <option>ECG Report</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky footer — always visible -->
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeUploadModal()">← Back</button>
+      <button class="btn-primary" id="upload-btn" onclick="simulateUpload()">✨ Upload & Analyse</button>
+    </div>
+  </div>
+</div>
+
+<!-- Signup Modal -->
+<div class="modal-overlay" id="signup-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>📝 Create Account</h3>
+      <button class="modal-close" onclick="closeSignup()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="signup-name" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label>Create Health ID</label>
+        <input type="text" id="signup-id" placeholder="e.g. SS-00999">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signup-pass" placeholder="Create password">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeSignup()">Cancel</button>
+      <button class="btn-primary" onclick="doSignup()">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✅</span>
+  <span id="toast-msg">Done!</span>
+</div>
+
+<script>
+  // ── State ──
+  let uploadedReports = [];
+  let USERS = JSON.parse(localStorage.getItem('ss_users') || 'null') || {
+    'SS-00123': { pass: 'health123', name: 'Rahul Sharma', initial: 'R' }
+  };
+
+  // ── Auth ──
+  function doLogin() {
+    const id = document.getElementById('login-id').value.trim();
+    const pass = document.getElementById('login-pass').value.trim();
+    const err = document.getElementById('login-error');
+    if (USERS[id] && USERS[id].pass === pass) {
+      err.style.display = 'none';
+      const user = USERS[id];
+      document.getElementById('user-name-display').textContent = user.name.split(' ')[0];
+      document.getElementById('user-name-top').textContent = user.name;
+      document.getElementById('user-avatar-icon').textContent = user.initial;
+      document.getElementById('user-id-badge').textContent = id;
+      document.getElementById('share-id').textContent = id;
+      document.getElementById('login-page').style.display = 'none';
+      document.getElementById('dashboard-page').style.display = 'block';
+      setDate();
+    } else {
+      err.style.display = 'block';
+      document.getElementById('login-pass').value = '';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('login-page').style.display !== 'none') doLogin();
+  });
+
+  function doLogout() {
+    document.getElementById('dashboard-page').style.display = 'none';
+    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('login-id').value = '';
+    document.getElementById('login-pass').value = '';
+  }
+
+  // ── Navigation ──
+  function showSection(name) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    const navMap = { dashboard: 0, reports: 1, health: 2, insights: 3, share: 4 };
+    const items = document.querySelectorAll('.nav-item');
+    if (navMap[name] !== undefined) items[navMap[name]].classList.add('active');
+  }
+
+  // ── Upload Modal ──
+  function openUploadModal() {
+    document.getElementById('upload-modal').classList.add('show');
+    document.getElementById('ai-loading').classList.remove('show');
+    document.getElementById('ai-result-box').classList.remove('show');
+    document.getElementById('ai-result-box').textContent = '';
+    document.getElementById('file-name').textContent = '';
+    document.getElementById('file-input').value = '';
+    document.getElementById('upload-btn').disabled = false;
+    document.getElementById('upload-btn').textContent = '✨ Upload & Analyse';
+  }
+
+  function closeUploadModal() {
+    document.getElementById('upload-modal').classList.remove('show');
+    // Always fully reset the modal state so it's ready next time
+    document.getElementById('ai-loading').classList.remove('show');
+    document.getElementById('ai-result-box').classList.remove('show');
+    document.getElementById('ai-result-box').textContent = '';
+    document.getElementById('file-name').textContent = '';
+    document.getElementById('file-input').value = '';
+    const btn = document.getElementById('upload-btn');
+    btn.disabled = false;
+    btn.textContent = '✨ Upload & Analyse';
+    btn.onclick = simulateUpload;
+  }
+
+  // Close modal by clicking the dark overlay background
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('upload-modal')) {
+      closeUploadModal();
+    }
+  }
+
+  document.getElementById('file-input').addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      document.getElementById('file-name').textContent = '📎 Selected: ' + file.name;
+      // Hide old result if user picks a new file
+      document.getElementById('ai-result-box').classList.remove('show');
+      document.getElementById('ai-loading').classList.remove('show');
+    }
+  });
+
+  // ── FIX 2: Read file content and call Anthropic API for real AI summary ──
+  async function simulateUpload() {
+    const fileInput = document.getElementById('file-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+      showToast('❌ Please select a file first');
+      return;
+    }
+
+    const uploadBtn = document.getElementById('upload-btn');
+    const loadingEl = document.getElementById('ai-loading');
+    const resultBox = document.getElementById('ai-result-box');
+
+    // Disable button, show loader
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = '⏳ Analysing...';
+    loadingEl.classList.add('show');
+    resultBox.classList.remove('show');
+
+    // Read file as text (works for .txt and some PDFs; images will get a fallback message)
+    let fileContent = '';
+    try {
+      fileContent = await readFileAsText(file);
+    } catch(e) {
+      fileContent = '[Binary file — image or PDF scan. Please describe the report contents above.]';
+    }
+
+    // Truncate to avoid token overload
+    if (fileContent.length > 4000) fileContent = fileContent.substring(0, 4000) + '...';
+
+    const reportType = document.getElementById('report-type-select').value;
+    const patientName = document.getElementById('user-name-top').textContent;
+
+    let aiSummary = '';
+    try {
+      // Call Anthropic Claude API
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `You are a medical AI assistant for SwasthyaSetu, an Indian health record platform.
+Analyze the provided medical report content and extract a structured patient summary.
+Always respond in this exact format:
+
+📋 REPORT TYPE: [type]
+👤 PATIENT: [name if found, else "Not specified"]
+📅 DATE: [date if found, else "Not specified"]
+
+🩺 DIAGNOSED CONDITIONS:
+- [list conditions found, or "None detected"]
+
+💊 MEDICATIONS IDENTIFIED:
+- [list medicines with dosage, or "None found"]
+
+⚠️ ALLERGIES/WARNINGS:
+- [list any allergies or warnings, or "None mentioned"]
+
+📊 KEY VALUES/VITALS:
+- [list test results, vitals, or key numbers]
+
+💡 AI INSIGHTS:
+[2-3 sentences of clinical observations and recommendations]
+
+If the file appears to be binary/image, note that OCR is needed and provide a general template.`,
+          messages: [{
+            role: 'user',
+            content: `Patient name: ${patientName}\nReport type selected: ${reportType}\n\nFile name: ${file.name}\n\nFile content:\n${fileContent}`
+          }]
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.content && data.content[0] && data.content[0].text) {
+        aiSummary = data.content[0].text;
+      } else if (data.error) {
+        aiSummary = `⚠️ API Error: ${data.error.message}\n\nFallback summary generated locally:\n\n` + generateFallbackSummary(file.name, reportType);
+      } else {
+        aiSummary = generateFallbackSummary(file.name, reportType);
+      }
+    } catch (err) {
+      // Network error or API unavailable — use fallback
+      aiSummary = generateFallbackSummary(file.name, reportType);
+    }
+
+    // Show result
+    loadingEl.classList.remove('show');
+    resultBox.textContent = aiSummary;
+    resultBox.classList.add('show');
+    uploadBtn.textContent = '✅ Save Report';
+    uploadBtn.disabled = false;
+    uploadBtn.onclick = () => saveReport(file, aiSummary);
+
+    showToast('✨ AI analysis complete!');
+  }
+
+  // Reads file as plain text
+  function readFileAsText(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = () => reject(new Error('Read error'));
+      // For images, this will give garbled data — we catch that gracefully
+      if (file.type.startsWith('image/')) {
+        reject(new Error('Image file'));
+      } else {
+        reader.readAsText(file);
+      }
+    });
+  }
+
+  // Fallback summary when API is unavailable
+  function generateFallbackSummary(fileName, reportType) {
+    return `📋 REPORT TYPE: ${reportType}
+👤 PATIENT: ${document.getElementById('user-name-top').textContent}
+📅 DATE: ${new Date().toLocaleDateString('en-IN')}
+
+🩺 DIAGNOSED CONDITIONS:
+- Requires manual review
+
+💊 MEDICATIONS IDENTIFIED:
+- Requires manual review
+
+⚠️ ALLERGIES/WARNINGS:
+- Cross-check with existing allergy records
+
+📊 KEY VALUES/VITALS:
+- File: ${fileName}
+- Manual extraction needed for image/scan reports
+
+💡 AI INSIGHTS:
+Please consult your doctor to review this report. For best AI extraction results, upload text-based PDF reports. Image-based reports (X-rays, scans) require OCR processing.`;
+  }
+
+  // Save report to the list after AI analysis
+  function saveReport(file, aiSummary) {
+    const fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+    const today = new Date().toLocaleDateString('en-IN');
+    const reportType = document.getElementById('report-type-select').value;
+    const fileURL = URL.createObjectURL(file);
+
+    uploadedReports.push({
+      name: file.name,
+      size: fileSize,
+      date: today,
+      type: reportType,
+      summary: aiSummary,
+      url: fileURL
+    });
+
+    const iconMap = {
+      'Blood Test / CBC': '🩸',
+      'Prescription': '💊',
+      'X-Ray / Scan': '🫁',
+      'ECG Report': '🫀',
+      'Other': '📄'
+    };
+    const icon = iconMap[reportType] || '📄';
+
+    const reportHTML = `
+      <div class="report-item">
+        <div class="report-icon">${icon}</div>
+        <div class="report-info">
+          <div class="report-name">${file.name}</div>
+          <div class="report-meta">📅 ${today} · ${fileSize} · ${reportType}</div>
+        </div>
+        <div class="report-actions">
+          <button class="btn-sm btn-view" onclick="window.open('${fileURL}','_blank')">View</button>
+          <button class="btn-sm btn-del" onclick="deleteReport(this)">Delete</button>
+        </div>
+      </div>`;
+
+    document.getElementById('reports-list').insertAdjacentHTML('afterbegin', reportHTML);
+
+    // Update report count
+    const newCount = document.querySelectorAll('.report-item').length;
+    document.getElementById('stat-reports').textContent = newCount;
+    document.getElementById('reports-count-badge').textContent = newCount;
+
+    closeUploadModal();
+    showToast('✅ Report saved successfully!');
+
+    // Reset for next upload
+    document.getElementById('upload-btn').onclick = simulateUpload;
+  }
+
+  // ── Download Summary (FIX: now uses actual uploaded report data) ──
+  function downloadSummary() {
+    const patientName = document.getElementById('user-name-top').textContent;
+    const patientId = document.getElementById('user-id-badge').textContent;
+    const today = new Date().toLocaleDateString('en-IN');
+
+    let summary = `SWASTHYASETU – PATIENT HEALTH SUMMARY
+=======================================
+Patient: ${patientName}
+Health ID: ${patientId}
+Generated: ${today}
+=======================================
+
+BASELINE HEALTH PROFILE:
+• Blood Pressure: 120/80 mmHg (Normal)
+• Blood Sugar: 105 mg/dL (Normal)
+• Hemoglobin: 10.8 g/dL (Low – monitor)
+• Cholesterol: 210 mg/dL (Borderline)
+• SpO₂: 97% (Normal)
+• Overall Health Score: 72/100
+
+ACTIVE CONDITIONS:
+• Viral Fever (Mar 2025)
+• Mild Anemia (Feb 2025)
+• Asthma – Controlled (Since 2019)
+• Borderline Cholesterol (Jan 2025)
+
+CURRENT MEDICATIONS:
+• Paracetamol 500mg – Twice daily
+• Azithromycin 250mg – Once daily
+• Montelukast 10mg – Night
+
+KNOWN ALLERGIES ⚠️:
+• Penicillin – SEVERE (avoid all penicillin-group)
+• Sulfa Drugs – Mild rash
+• Dust Mites – Triggers asthma
+
+`;
+
+    if (uploadedReports.length > 0) {
+      summary += `\nUPLOADED REPORTS & AI ANALYSIS:\n`;
+      summary += `${'='.repeat(40)}\n`;
+      uploadedReports.forEach((rep, i) => {
+        summary += `\nReport ${i + 1}: ${rep.name}\n`;
+        summary += `Date: ${rep.date} | Type: ${rep.type} | Size: ${rep.size}\n`;
+        summary += `\nAI Analysis:\n${rep.summary}\n`;
+        summary += `${'-'.repeat(40)}\n`;
+      });
+    } else {
+      summary += `\nNo additional reports uploaded in this session.\n`;
+    }
+
+    summary += `\n=======================================\n`;
+    summary += `⚠️ DISCLAIMER: This summary is AI-assisted. Always consult a qualified doctor.\n`;
+    summary += `Generated by SwasthyaSetu | swasthyasetu.in\n`;
+
+    const blob = new Blob([summary], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `SwasthyaSetu_${patientId}_Summary.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('📥 Summary downloaded!');
+  }
+
+  // ── Toast ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // ── Delete report ──
+  function deleteReport(btn) {
+    const item = btn.closest('.report-item');
+    item.style.opacity = '0';
+    item.style.transition = 'opacity 0.3s';
+    setTimeout(() => {
+      item.remove();
+      const newCount = document.querySelectorAll('.report-item').length;
+      document.getElementById('stat-reports').textContent = newCount;
+      document.getElementById('reports-count-badge').textContent = newCount;
+      showToast('🗑️ Report deleted');
+    }, 300);
+  }
+
+  // ── Copy ID ──
+  function copyId() {
+    const id = document.getElementById('user-id-badge').textContent;
+    navigator.clipboard?.writeText(id).catch(() => {});
+    showToast('📋 Health ID copied: ' + id);
+  }
+
+  // ── Share ──
+  function shareLink() {
+    navigator.clipboard?.writeText(window.location.href).catch(() => {});
+    showToast('🔗 Link copied! Share with your doctor');
+  }
+
+  function sendEmail() {
+    const subject = encodeURIComponent('My Health Records – SwasthyaSetu');
+    const body = encodeURIComponent(`Hello Doctor,\n\nPlease find my health records at: ${window.location.href}\n\nHealth ID: ${document.getElementById('user-id-badge').textContent}\n\nRegards,\n${document.getElementById('user-name-top').textContent}`);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  }
+
+  function shareWhatsApp() {
+    const text = encodeURIComponent(`My health record (SwasthyaSetu): ${window.location.href}`);
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+  }
+
+  // ── Signup ──
+  function showSignup() { document.getElementById('signup-modal').classList.add('show'); }
+  function closeSignup() { document.getElementById('signup-modal').classList.remove('show'); }
+
+  function doSignup() {
+    const name = document.getElementById('signup-name').value.trim();
+    const id = document.getElementById('signup-id').value.trim();
+    const pass = document.getElementById('signup-pass').value.trim();
+    if (!name || !id || !pass) { showToast('❌ Please fill all fields'); return; }
+    if (USERS[id]) { showToast('⚠️ Health ID already exists'); return; }
+    USERS[id] = { pass, name, initial: name.charAt(0).toUpperCase() };
+    localStorage.setItem('ss_users', JSON.stringify(USERS));
+    closeSignup();
+    showToast('✅ Account created! Please login.');
+    document.getElementById('signup-name').value = '';
+    document.getElementById('signup-id').value = '';
+    document.getElementById('signup-pass').value = '';
+  }
+
+  // ── Date ──
+  function setDate() {
+    const d = new Date();
+    document.getElementById('today-date').textContent = d.toLocaleDateString('en-IN', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    });
+  }
+</script>
+</body>
+</html>
